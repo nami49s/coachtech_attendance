@@ -6,6 +6,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminAttendanceController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\AdminRequestController;
 use Carbon\Carbon;
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
@@ -31,6 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])->name('attendance.detail');
     //勤怠修正申請画面
     Route::post('/attendance/request', [RequestController::class, 'storeAttendance'])->name('attendance.request.submit');
+    //勤怠修正申請一覧画面
+    Route::get('/requests', [RequestController::class, 'index'])->name('requests.index');
+    Route::get('/requests/{id}', [RequestController::class, 'show'])->name('requests.show');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -43,5 +47,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/staffs', [AdminAttendanceController::class, 'staffs'])->name('staffs');
         Route::get('/admin/show/{attendance}', [AdminAttendanceController::class, 'show'])->name('show');
         Route::get('/admin/monthlyattendance/{user}', [AdminAttendanceController::class, 'monthlyAttendance'])->name('monthlyAttendance');
+        Route::post('/admin/attendance/{attendance}/update', [AdminAttendanceController::class, 'update'])->name('attendance.update');
+        Route::get('/requests', [AdminRequestController::class, 'index'])->name('requests.index');
+        Route::get('/requests/{id}', [AdminRequestController::class, 'show'])->name('requests.show');
+        Route::post('/requests/{id}/approve', [AdminRequestController::class, 'approve'])->name('requests.approve');
     });
 });

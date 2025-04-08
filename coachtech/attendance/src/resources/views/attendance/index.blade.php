@@ -14,7 +14,7 @@
         <div class="header-links">
             <a href="{{ route('attendance.show') }}" class="attendance-link">勤怠</a>
             <a href="{{ route('attendance.index') }}" class="attendance-list-link">勤怠一覧</a>
-            <a href="" class="request-link">申請</a>
+            <a href="{{ route('requests.index') }}" class="request-link">申請</a>
         </div>
         <form action="{{ route('logout') }}" method="POST">
             @csrf

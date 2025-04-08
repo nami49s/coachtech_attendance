@@ -14,7 +14,7 @@
         <div class="header-links">
             <a href="{{ route('admin.index') }}" class="attendance-link">勤怠一覧</a>
             <a href="{{ route('admin.staffs') }}" class="attendance-list-link">スタッフ一覧</a>
-            <a href="" class="request-link">申請一覧</a>
+            <a href="{{ route('admin.requests.index') }}" class="request-link">申請一覧</a>
         </div>
         <form action="{{ route('admin.logout') }}" method="POST">
             @csrf

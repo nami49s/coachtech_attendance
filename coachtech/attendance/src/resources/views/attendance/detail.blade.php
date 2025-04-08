@@ -14,7 +14,7 @@
         <div class="header-links">
             <a href="{{ route('attendance.show') }}" class="attendance-link">勤怠</a>
             <a href="{{ route('attendance.index') }}" class="attendance-list-link">勤怠一覧</a>
-            <a href="" class="request-link">申請</a>
+            <a href="{{ route('requests.index') }}" class="request-link">申請</a>
         </div>
         <form action="{{ route('logout') }}" method="POST">
             @csrf
@@ -31,11 +31,11 @@
                 <table class="detail-table">
                     <tr>
                         <th>名前</th>
-                        <td>{{ $attendance->user->name }}</td>
+                        <td>{{ $attendanceRequest->user->name }}</td>
                     </tr>
                     <tr>
                         <th>日付</th>
-                        <td>{{ \Carbon\Carbon::parse($attendanceRequest->date)->format('Y年 m月 d日') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($attendanceRequest->attendance->date)->format('Y年 m月 d日') }}</td>
                     </tr>
                     <tr>
                         <th>出勤退勤時間</th>

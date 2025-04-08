@@ -69,4 +69,36 @@ class AdminAttendanceController extends Controller
             'user' => $user
         ]);
     }
+
+    public function update(Request $request, $id)
+    {
+        $attendance = Attendance::findOrFail($id);
+
+        // 出勤・退勤・備考の更新
+        $attendance->checkin_time = $request->input('checkin_time');
+        $attendance->checkout_time = $request->input('checkout_time');
+        $attendance->remarks = $request->input('remarks');
+        $attendance->save();
+
+        // 既存の休憩を削除
+        $attendance->breaks()->delete();
+
+        // 新しい休憩データを保存
+        $breakStarts = $request->input('break_start');
+        $breakEnds = $request->input('break_end');
+
+        if ($breakStarts && $breakEnds) {
+            foreach ($breakStarts as $index => $start) {
+                if ($start || $breakEnds[$index]) {
+                    BreakTime::create([
+                        'attendance_id' => $attendance->id,
+                        'break_start' => $start,
+                        'break_end' => $breakEnds[$index],
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('admin.show', ['attendance' => $attendance->id])->with('success', '勤怠情報を更新しました。');
+    }
 }

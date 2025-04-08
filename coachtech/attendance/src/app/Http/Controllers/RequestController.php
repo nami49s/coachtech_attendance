@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\AttendanceRequestForm;
 use App\Models\AttendanceRequest;
 use App\Models\BreakRequest;
+use App\Models\Attendance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -55,5 +56,34 @@ class RequestController extends Controller
         }
 
         return back()->with('success', '勤怠修正申請を送信しました');
+    }
+
+    public function index()
+    {
+        $pendingRequests = AttendanceRequest::with(['attendance', 'user'])
+                                            ->where('status', 'pending')
+                                            ->where('user_id', Auth::id())  // ログインしているユーザーのIDを取得
+                                            ->get();
+
+        $approvedRequests = AttendanceRequest::with(['attendance', 'user'])
+                                            ->where('status', 'approved')
+                                            ->where('user_id', Auth::id())  // ログインしているユーザーのIDを取得
+                                            ->get();
+
+
+        return view('requests.index', compact('pendingRequests', 'approvedRequests'));
+    }
+
+    public function show($id)
+    {
+        $attendanceRequest = AttendanceRequest::with('attendance')->findOrFail($id);
+
+        // Attendance モデルで勤怠情報を取得（関連データなどがあれば）
+        $attendance = Attendance::where('user_id', $attendanceRequest->user_id)
+                                ->where('date', $attendanceRequest->date)
+                                ->first();  // 例えば同じ日付の勤怠データを取得
+
+        // ビューに両方のデータを渡す
+        return view('attendance.detail', compact('attendanceRequest', 'attendance'));
     }
 }
