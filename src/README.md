@@ -18,6 +18,6 @@
 ## URL
 
 ## ER図
-![ER図](src/public/images/attendance.png)
+![ER図](public/images/attendance.png)
 
 ## テストユーザー情報
