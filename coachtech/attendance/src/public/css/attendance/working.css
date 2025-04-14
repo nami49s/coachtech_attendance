@@ -1,0 +1,55 @@
+body {
+    background: rgb(237, 240, 240);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    text-align: center;
+}
+
+.status-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(100, 100, 100);
+    background: rgb(190, 187, 187);
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+.date-text {
+    font-size: 30px;
+    margin-top: 2px;
+}
+
+.time-text {
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 30px;
+}
+
+.checkout-button {
+    background: #000000;
+    color: #ffffff;
+    padding: 10px 50px;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+.break-button {
+    background: #ffffff;
+    color: #000000;
+    padding: 10px 50px;
+    border-radius: 15px;
+    border: 1px solid #ffffff;
+    font-weight: bold;
+}
