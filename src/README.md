@@ -1,0 +1,23 @@
+# coachtech勤怠管理アプリ
+
+## プロジェクト内容
+
+## 機能一覧
+
+## 環境構築
+### Dockerビルド
+
+### Laravel環境構築
+
+## 使用技術
+
+## 使用ライブラリ
+
+## メール送信設定（Mailtrap）
+
+## URL
+
+## ER図
+![ER図](src/public/images/attendance.png)
+
+## テストユーザー情報

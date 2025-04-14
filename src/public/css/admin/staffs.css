@@ -1,0 +1,83 @@
+body {
+    background: rgb(237, 240, 240);
+}
+
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+main h1 {
+    text-align: left;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #000000;
+}
+
+.line {
+    font-weight: bolder;
+}
+
+/* テーブルスタイル */
+table {
+    width: 100%;
+    border: 3px solid rgb(237, 240, 240);
+    border-radius: 10px;
+    background-color: #ffffff;
+    border-collapse: collapse;
+    overflow: hidden;
+    table-layout: fixed;
+}
+
+th {
+    border-bottom: 4px solid rgb(237, 240, 240);
+    padding: 0.8rem;
+    text-align: center;
+    background-color: #ffffff;
+    color: #6a6a6a;
+}
+
+td {
+    border-bottom: 3px solid rgb(237, 240, 240);
+    padding: 0.8rem;
+    text-align: center;
+    background-color: #ffffff;
+    color: #6a6a6a;
+}
+
+th:not(:last-child),
+td:not(:last-child) {
+    border-right: none;
+}
+
+a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* レスポンシブ対応 */
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    main {
+        padding: 1rem;
+    }
+
+    th,
+    td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    main h1 {
+        font-size: 1.5rem;
+    }
+
+    a {
+        font-size: 0.9rem;
+    }
+}

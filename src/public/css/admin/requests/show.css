@@ -1,0 +1,177 @@
+body {
+    background: rgb(237, 240, 240);
+}
+
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+main h1 {
+    text-align: left;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.line {
+    font-weight: bolder;
+}
+
+.detail-table {
+    width: 100%;
+    border: 3px solid rgb(237, 240, 240);
+    border-radius: 10px;
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+.detail-table th {
+    border: none;
+    border-bottom: 3px solid rgb(237, 240, 240);
+    padding: 2rem 2rem 1rem 3rem;
+    text-align: left;
+    background-color: #ffffff;
+    color: #979494;
+}
+
+.detail-table td {
+    border-bottom: 3px solid rgb(237, 240, 240);
+    padding: 1.5rem 2rem 1rem 3rem;
+    text-align: left;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.detail-table th:not(:last-child),
+.detail-table td:not(:last-child) {
+    border-right: none;
+}
+
+.detail-table tr:last-child td {
+    border-bottom: none;
+    /* 最後の行の下の横線を非表示にする */
+}
+
+.detail-table td span {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    /* 横幅を100%にして均等に配置 */
+}
+
+.detail-table td span span {
+    display: inline-block;
+    width: 20%;
+    /* 各要素の横幅を適切に調整 */
+    text-align: left;
+    /* 中央揃え */
+}
+
+.time-row {
+    display: flex;
+    align-items: left;
+    gap: 80px;
+}
+
+.time-row input[type="time"] {
+    width: 80px;
+}
+
+/* Chrome, Safari 対応 */
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+/* Firefox対応 */
+input[type="time"]::-moz-focus-inner {
+    border: 0;
+}
+
+/* フォーム共通 */
+input[type="time"],
+textarea {
+    padding: 3px 10px 3px 10px;
+    font-size: 16px;
+    width: 150px;
+    border: 1px solid #cdcdcd;
+    border-radius: 3px;
+}
+
+/* 備考欄を広く */
+textarea[name="remarks"] {
+    width: 60%;
+    height: 120px;
+    resize: vertical;
+    border: 1px solid #cdcdcd;
+    border-radius: 3px;
+}
+
+.date-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: left;
+    width: 65%;
+}
+
+.date-divider {
+    margin: 0 10px;
+    /* 年と月日の間隔を調整 */
+    font-weight: bold;
+}
+
+.detail-link {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.detail-link:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.btn {
+    padding: 5px 40px;
+    margin-top: 3rem;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+}
+
+button.approved {
+    background-color: #5a5858ac!important;
+    color: #ffffff!important;
+    cursor: default!important;
+}
+
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    main {
+        padding: 1rem;
+    }
+
+    .detail-table th,
+    .detail-table td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+
+    main h1 {
+        font-size: 1.5rem;
+    }
+
+    .detail-link {
+        font-size: 0.9rem;
+    }
+}
