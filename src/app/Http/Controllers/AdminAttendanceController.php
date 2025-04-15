@@ -9,6 +9,7 @@ use App\Models\Attendance;
 use Carbon\Carbon;
 use App\Models\BreakTime;
 use App\Http\Requests\UpdateAttendanceRequest;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminAttendanceController extends Controller
 {
@@ -101,5 +102,58 @@ class AdminAttendanceController extends Controller
         }
 
         return redirect()->route('admin.show', ['attendance' => $attendance->id])->with('success', '勤怠情報を更新しました。');
+    }
+
+    public function exportCsv($userId, $month)
+    {
+        $startDate = Carbon::parse($month)->startOfMonth();
+        $endDate = Carbon::parse($month)->endOfMonth();
+
+        $attendances = Attendance::with('breaks')
+            ->where('user_id', $userId)
+            ->whereBetween('date', [$startDate, $endDate])
+            ->get();
+
+        $user = \App\Models\User::findOrFail($userId);
+
+        $fileName = $user->name . '_' . $month . '_勤怠.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+        ];
+
+        $columns = ['日付', '出勤', '退勤', '休憩', '合計'];
+
+        $callback = function () use ($attendances, $columns) {
+            $handle = fopen('php://output', 'w');
+            // 文字コードをShift-JISに変換（Excel向け）
+            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF)); // BOM
+
+            fputcsv($handle, $columns);
+
+            foreach ($attendances as $attendance) {
+                $breaks = $attendance->breaks ?? collect([]);
+                $totalBreak = $breaks->sum(function ($break) {
+                    return $break->break_end ? strtotime($break->break_end) - strtotime($break->break_start) : 0;
+                });
+
+                $row = [
+                    Carbon::parse($attendance->date)->format('Y/m/d'),
+                    $attendance->checkin_time ? Carbon::parse($attendance->checkin_time)->format('H:i') : '',
+                    $attendance->checkout_time ? Carbon::parse($attendance->checkout_time)->format('H:i') : '',
+                    gmdate('H:i', $totalBreak),
+                    $attendance->checkout_time
+                        ? gmdate("H:i", strtotime($attendance->checkout_time) - strtotime($attendance->checkin_time) - $totalBreak)
+                        : '',
+                ];
+
+                fputcsv($handle, $row);
+            }
+
+            fclose($handle);
+        };
+
+        return new StreamedResponse($callback, 200, $headers);
     }
 }

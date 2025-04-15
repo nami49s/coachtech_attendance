@@ -47,6 +47,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/staffs', [AdminAttendanceController::class, 'staffs'])->name('staffs');
         Route::get('/admin/show/{attendance}', [AdminAttendanceController::class, 'show'])->name('show');
         Route::get('/admin/monthlyattendance/{user}', [AdminAttendanceController::class, 'monthlyAttendance'])->name('monthlyAttendance');
+        Route::get('monthly-attendance/export/{user}/{month}', [AdminAttendanceController::class, 'exportCsv'])
+        ->name('monthlyAttendance.export');
         Route::post('/admin/attendance/{attendance}/update', [AdminAttendanceController::class, 'update'])->name('attendance.update');
         Route::get('/requests', [AdminRequestController::class, 'index'])->name('requests.index');
         Route::get('/requests/{id}', [AdminRequestController::class, 'show'])->name('requests.show');
