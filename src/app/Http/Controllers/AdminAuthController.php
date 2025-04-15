@@ -19,10 +19,11 @@ class AdminAuthController extends Controller
 
     public function login(AdminLoginRequest $request)
     {
+        Auth::guard('web')->logout();
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('admin')->attempt($credentials)) {
-            return redirect()->intended('admin/index');
+            return redirect()->route('admin.index');
         }
 
         return back()->withErrors(['login_error' => 'ログイン情報が登録されていません']);
