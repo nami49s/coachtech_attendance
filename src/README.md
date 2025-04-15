@@ -78,7 +78,7 @@ coachtech勤怠管理アプリは、
 - **Mailtrap**
   開発環境でのメール送信確認用サービス。
   `.env` に以下の設定を記述することで使用可能：
-
+```dotenv
 MAIL_MAILER=smtp
 MAIL_HOST=sandbox.smtp.mailtrap.io
 MAIL_PORT=2525
@@ -87,6 +87,7 @@ MAIL_PASSWORD=your_mailtrap_password
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=test@example.com
 MAIL_FROM_NAME="coachtech_attendance"
+```
 
 *Mailtrap の設定後、以下のコマンドでメール送信をテストできます。 php artisan tinker Mail::raw('テストメール', function($message) { $message->to('test@example.com')->subject('Test Email'); });
 
