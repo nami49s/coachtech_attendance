@@ -26,8 +26,8 @@ coachtech勤怠管理アプリは、
 * MySQLは、OSによって起動しない場合があるのでそれぞれのPCに合わせてdocker-compose.ymlファイルを編集してください。
 
 ### Laravel環境構築
-1. .env.exampleをコピーして.envを作成し、環境変数を変更
-2. 作成した.envファイルをsrcに移動
+1. srcディレクトリ内で .env.example をコピーして .env を作成
+2. cd src
 3. docker-compose exec php bash
 4. composer install
 5. php artisan key:generate
@@ -61,8 +61,6 @@ coachtech勤怠管理アプリは、
   非同期通信（API連携）用のHTTPクライアント。
 
 ### ローカル開発用
-- **Laravel Sail**: ^1.41
-  Laravel公式のDocker開発環境（使用している場合）。
 - **Laravel Pint**: ^1.13
   コード整形ツール。
 - **FakerPHP/Faker**: ^1.23
