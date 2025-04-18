@@ -34,6 +34,7 @@ coachtech勤怠管理アプリは、
 6. php artisan migrate
 7. php artisan db:seed
 8. php artisan serve
+* うまくいかない場合はDB_CONNECTION=mysql,DB_HOST=mysqlにしてキャッシュクリア、その後mysqlでDROP DATABASE IF EXISTS laravel_db;とCREATE DATABASE laravel_db;を実行した後にマイグレーションとシーディングを行ってください。
 
 ## 使用技術
 * PHP 8.4.3
