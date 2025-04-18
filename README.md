@@ -97,7 +97,7 @@ MAIL_FROM_NAME="coachtech_attendance"
 * phpMyAdmin:http://localhost:8080
 
 ## ER図　　
-![ER図](public/images/attendance.png)
+![ER図](src/public/images/attendance.png)
 
 ## テストユーザー情報
 一般ユーザー: シーディングで作成されるテストユーザーのメールアドレスは、毎回異なります。これは、test と現在時刻 (time()) を組み合わせて一意のメールアドレスを生成しているためです。
