@@ -35,24 +35,12 @@ class AdminRequestController extends Controller
                 $attendanceRequest->status = 'approved';
                 $attendanceRequest->save();
 
-                $date = $attendanceRequest->date;
+                $attendance = Attendance::findOrFail($attendanceRequest->attendance_id);
+                $attendance->checkin_time = $attendanceRequest->checkin_time;
+                $attendance->checkout_time = $attendanceRequest->checkout_time;
+                $attendance->remarks = $attendanceRequest->remarks;
+                $attendance->save();
 
-                $attendance = Attendance::updateOrCreate(
-                    [
-                        'user_id' => $attendanceRequest->user_id,
-                        'date' => $date,
-                    ],
-                    [
-                        'checkin_time' => $attendanceRequest->checkin_time,
-                        'checkout_time' => $attendanceRequest->checkout_time,
-                        'remarks' => $attendanceRequest->remarks,
-                    ]
-                );
-
-                // この行が問題の原因 - 全ての既存の休憩を削除している
-                // BreakTime::where('attendance_id', $attendance->id)->delete();
-
-                // 代わりに、break IDとBreakTimeレコードのマッピングを維持する
                 $breakTimeMap = BreakTime::where('attendance_id', $attendance->id)
                     ->pluck('id', 'id')
                     ->toArray();
@@ -72,9 +60,7 @@ class AdminRequestController extends Controller
                     $breakRequest->status = 'approved';
                     $breakRequest->save();
 
-                    // 既存の休憩を修正する場合
                     if ($breakRequest->break_id) {
-                        // 既存の休憩を更新
                         BreakTime::updateOrCreate(
                             ['id' => $breakRequest->break_id],
                             [
@@ -83,21 +69,16 @@ class AdminRequestController extends Controller
                                 'break_end' => $breakRequest->break_end,
                             ]
                         );
-
-                        // このbreak IDを処理済みとして記録
                         $processedBreakIds[] = $breakRequest->break_id;
                     } else {
-                        // 新しい休憩を作成
-                        BreakTime::create([
+                        $newBreak = BreakTime::create([
                             'attendance_id' => $attendance->id,
                             'break_start' => $breakRequest->break_start,
                             'break_end' => $breakRequest->break_end,
                         ]);
+                        $processedBreakIds[] = $newBreak->id;
                     }
                 }
-
-                // 削除された休憩（リクエストに含まれていないもの）を削除
-                // ただし、上記で処理されなかったものだけ
                 foreach ($breakTimeMap as $breakTimeId) {
                     if (!in_array($breakTimeId, $processedBreakIds)) {
                         BreakTime::where('id', $breakTimeId)->delete();
@@ -106,6 +87,7 @@ class AdminRequestController extends Controller
             });
 
             return response()->json(['success' => true]);
+
         } catch (\Throwable $e) {
             \Log::error('承認エラー：' . $e->getMessage());
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);

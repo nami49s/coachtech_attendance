@@ -21,7 +21,7 @@ Route::middleware('auth:web', 'verified')->group(function () {
     Route::post('/attendance/checkin', [AttendanceController::class, 'checkin'])->name('attendance.checkin');
     Route::get('/attendance/working', [AttendanceController::class, 'working'])->name('attendance.working');
     Route::post('/attendance/checkout', [AttendanceController::class, 'checkout'])->name('attendance.checkout');
-    Route::get('/attendance/checkout', [AttendanceController::class, 'checkoutView'])->name('attendance.checkout');
+    Route::get('/attendance/checkout', [AttendanceController::class, 'checkoutView'])->name('attendance.checkout.view');
     Route::post('/attendance/break/start', [AttendanceController::class, 'breakStart'])->name('attendance.break.start');
     Route::get('/attendance/break', [AttendanceController::class, 'breakView'])->name('attendance.break');
     Route::post('/attendance/break/end', [AttendanceController::class, 'breakEnd'])->name('attendance.break.end');

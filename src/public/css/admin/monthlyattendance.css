@@ -19,7 +19,6 @@ main h1 {
     font-weight: bolder;
 }
 
-/* 月次ナビゲーション */
 .month-navigation {
     display: flex;
     justify-content: space-between;
@@ -46,7 +45,6 @@ main h1 {
     text-decoration: underline;
 }
 
-/* 勤怠テーブル */
 .attendance-table {
     width: 100%;
     border: 3px solid rgb(237, 240, 240);
@@ -54,7 +52,6 @@ main h1 {
     background-color: #ffffff;
     overflow: hidden;
     table-layout: fixed;
-    /* 均等幅にするための設定 */
 }
 
 .attendance-table th,
@@ -109,7 +106,6 @@ main h1 {
     background-color: #a19e9e;
 }
 
-/* レスポンシブ対応 */
 @media screen and (min-width: 768px) and (max-width: 850px) {
     main {
         padding: 1rem;

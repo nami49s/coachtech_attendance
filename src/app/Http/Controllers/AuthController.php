@@ -8,6 +8,7 @@ use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class AuthController extends Controller
 {
@@ -25,11 +26,17 @@ class AuthController extends Controller
 
         $user->sendEmailVerificationNotification();
 
-        // ログインさせる
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $user->id, 'hash' => sha1($user->email)]
+        );
+
         Auth::login($user);
 
-        // メール認証画面にリダイレクト
-        return redirect()->route('verification.notice');
+        return redirect()->route('verification.notice')->with([
+            'verification_link' => $verificationUrl,
+        ]);
     }
 
     public function login()
@@ -46,7 +53,7 @@ class AuthController extends Controller
             return redirect()->route('attendance.show')->with('success', 'ログインしました');
         }
         return back()->withErrors([
-            'login_error' => 'ログイン情報が登録されていません',
+            'email' => 'ログイン情報が登録されていません',
         ])->onlyInput('email');
     }
 

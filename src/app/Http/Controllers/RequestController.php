@@ -35,7 +35,7 @@ class RequestController extends Controller
             'date' => $request->date,
         ]);
 
-        $breakIds = $request->break_id; // break_timesのID
+        $breakIds = $request->break_id;
         $breakStarts = $request->break_start;
         $breakEnds = $request->break_end;
 
@@ -48,7 +48,6 @@ class RequestController extends Controller
                 continue;
             }
 
-            // 既存のBreakTimeに対する申請かどうかをチェック
             $existingBreakRequest = BreakRequest::where('attendance_request_id', $attendanceRequest->id)
                                                 ->where('break_id', $breakId)
                                                 ->first();
@@ -63,7 +62,7 @@ class RequestController extends Controller
                 BreakRequest::create([
                     'user_id' => Auth::id(),
                     'attendance_request_id' => $attendanceRequest->id,
-                    'break_id' => $breakId, // null でも新規としてOK
+                    'break_id' => $breakId,
                     'break_start' => $startTime,
                     'break_end' => $endTime,
                     'status' => 'pending',
@@ -78,12 +77,12 @@ class RequestController extends Controller
     {
         $pendingRequests = AttendanceRequest::with(['attendance', 'user'])
                                             ->where('status', 'pending')
-                                            ->where('user_id', Auth::id())  // ログインしているユーザーのIDを取得
+                                            ->where('user_id', Auth::id())
                                             ->get();
 
         $approvedRequests = AttendanceRequest::with(['attendance', 'user'])
                                             ->where('status', 'approved')
-                                            ->where('user_id', Auth::id())  // ログインしているユーザーのIDを取得
+                                            ->where('user_id', Auth::id())
                                             ->get();
 
 
@@ -94,12 +93,10 @@ class RequestController extends Controller
     {
         $attendanceRequest = AttendanceRequest::with('attendance')->findOrFail($id);
 
-        // Attendance モデルで勤怠情報を取得（関連データなどがあれば）
         $attendance = Attendance::where('user_id', $attendanceRequest->user_id)
                                 ->where('date', $attendanceRequest->attendance->date)
-                                ->first();  // 例えば同じ日付の勤怠データを取得
+                                ->first();
 
-        // ビューに両方のデータを渡す
         return view('attendance.detail', compact('attendanceRequest', 'attendance'));
     }
 }

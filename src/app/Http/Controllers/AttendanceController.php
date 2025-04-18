@@ -36,7 +36,6 @@ class AttendanceController extends Controller
             return view('attendance.checkout');
         }
 
-        // 休憩中かどうかをチェック
         $activeBreak = BreakTime::where('attendance_id', $attendance->id)
             ->whereNull('break_end')
             ->first();
@@ -45,7 +44,6 @@ class AttendanceController extends Controller
             return view('attendance.break');
         }
 
-        // 出勤済みで休憩中でない場合
         return view('attendance.working');
     }
 
@@ -95,7 +93,7 @@ class AttendanceController extends Controller
             ]);
         });
 
-        return redirect()->route('attendance.checkout')
+        return redirect()->route('attendance.checkout.view')
             ->with('success', '退勤しました。');
     }
 

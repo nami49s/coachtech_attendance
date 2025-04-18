@@ -19,7 +19,6 @@ main h1 {
     font-weight: bolder;
 }
 
-/* テーブルスタイル */
 table {
     width: 100%;
     border: 3px solid rgb(237, 240, 240);
@@ -61,7 +60,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/* レスポンシブ対応 */
 @media screen and (min-width: 768px) and (max-width: 850px) {
     main {
         padding: 1rem;

@@ -61,6 +61,9 @@ class AttendanceRequestForm extends FormRequest
                 if ($end && ($end < $checkin || ($checkout && $end > $checkout))) {
                     $validator->errors()->add("break_end.$index", '休憩時間が勤務時間外です。');
                 }
+                if (isset($breakStarts[$index]) && $end < $breakStarts[$index]) {
+                    $validator->errors()->add("break_end.$index", '休憩時間が勤務時間外です。');
+                }
             }
         });
     }

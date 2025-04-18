@@ -51,22 +51,18 @@ main h1 {
 
 .detail-table tr:last-child td {
     border-bottom: none;
-    /* 最後の行の下の横線を非表示にする */
 }
 
 .detail-table td span {
     display: flex;
     justify-content: space-between;
     width: 70%;
-    /* 横幅を100%にして均等に配置 */
 }
 
 .detail-table td span span {
     display: inline-block;
     width: 20%;
-    /* 各要素の横幅を適切に調整 */
     text-align: left;
-    /* 中央揃え */
 }
 
 .time-row {
@@ -79,18 +75,15 @@ main h1 {
     width: 80px;
 }
 
-/* Chrome, Safari 対応 */
 input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
 }
 
-/* Firefox対応 */
 input[type="time"]::-moz-focus-inner {
     border: 0;
 }
 
-/* フォーム共通 */
 input[type="time"],
 textarea {
     padding: 3px 10px 3px 10px;
@@ -100,7 +93,6 @@ textarea {
     border-radius: 3px;
 }
 
-/* 備考欄を広く */
 textarea[name="remarks"] {
     width: 60%;
     height: 120px;
@@ -118,7 +110,6 @@ textarea[name="remarks"] {
 
 .date-divider {
     margin: 0 10px;
-    /* 年と月日の間隔を調整 */
     font-weight: bold;
 }
 

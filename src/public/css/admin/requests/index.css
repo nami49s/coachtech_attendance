@@ -20,7 +20,6 @@ main h1 {
     font-weight: bolder;
 }
 
-/* ===== テーブルスタイル ===== */
 .table {
     width: 100%;
     table-layout: auto;
@@ -46,7 +45,6 @@ main h1 {
 
 .remarks-cell {
     max-width: 200px;
-    /* 適宜調整 */
 }
 
 .table th {
@@ -61,14 +59,10 @@ main h1 {
 
 .table td a {
     display: inline-block;
-    /* ← デフォルトでもinlineだけど安定化 */
     white-space: nowrap;
-    /* ← 改行しない */
     min-width: 60px;
-    /* ← 幅が狭すぎる場合の防止 */
 }
 
-/* ===== 詳細リンクの見た目統一 ===== */
 .table a {
     color: #000000;
     font-weight: bold;
@@ -79,7 +73,6 @@ main h1 {
     text-decoration: underline;
 }
 
-/* ===== タブの見た目カスタマイズ ===== */
 .nav-tabs {
     border-bottom: 1px solid #000000;
     margin-bottom: 2rem;
@@ -105,7 +98,6 @@ main h1 {
 
     .table {
         min-width: 600px;
-        /* 必要に応じて調整 */
         font-size: 0.6rem;
     }
 

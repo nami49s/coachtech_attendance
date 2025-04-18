@@ -16,17 +16,14 @@ class AttendanceFactory extends Factory
 
     public function definition(): array
     {
-        // 0〜30日前のランダムな日付
         $date = Carbon::today()->subDays(fake()->numberBetween(0, 30));
 
-        // 出勤時間：08:00〜10:00の間
         $checkinTime = (clone $date)->addHours(fake()->numberBetween(8, 10));
 
-        // 退勤時間：出勤から6〜10時間後
         $checkoutTime = (clone $checkinTime)->addHours(fake()->numberBetween(6, 10));
 
         return [
-            'user_id' => User::factory(), // 関連するユーザーを自動生成
+            'user_id' => User::factory(),
             'date' => $date->toDateString(),
             'checkin_time' => $checkinTime->format('H:i'),
             'checkout_time' => $checkoutTime->format('H:i'),

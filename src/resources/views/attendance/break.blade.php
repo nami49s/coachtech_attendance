@@ -25,9 +25,16 @@
         <div class="status">
             <p><span class="status-text">休憩中</span></p>
         </div>
+        @php
+            use Carbon\Carbon;
+            $now = Carbon::now()->locale('ja');
+            $date = $now->isoFormat('YYYY年M月D日(ddd)');
+            $time = $now->format('H:i');
+        @endphp
+
         <div class="date-time">
-            <p><span class="date-text" id="current-date"></span></p>
-            <p><span class="time-text" id="current-time"></span></p>
+            <p><span class="date-text">{{ $date }}</span></p>
+            <p><span class="time-text">{{ $time }}</span></p>
         </div>
         <form class="break-form" action="{{ route('attendance.break.end') }}" method="POST">
             @csrf

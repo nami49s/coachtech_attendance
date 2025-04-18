@@ -76,16 +76,13 @@ class AdminAttendanceController extends Controller
     {
         $attendance = Attendance::findOrFail($id);
 
-        // 出勤・退勤・備考の更新
         $attendance->checkin_time = $request->input('checkin_time');
         $attendance->checkout_time = $request->input('checkout_time');
         $attendance->remarks = $request->input('remarks');
         $attendance->save();
 
-        // 既存の休憩を削除
         $attendance->breaks()->delete();
 
-        // 新しい休憩データを保存
         $breakStarts = $request->input('break_start');
         $breakEnds = $request->input('break_end');
 
@@ -127,8 +124,8 @@ class AdminAttendanceController extends Controller
 
         $callback = function () use ($attendances, $columns) {
             $handle = fopen('php://output', 'w');
-            // 文字コードをShift-JISに変換（Excel向け）
-            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF)); // BOM
+
+            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
             fputcsv($handle, $columns);
 
