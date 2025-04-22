@@ -23,12 +23,14 @@
                 </div>
             @endif
             <div class="btn-container">
-                @if (app()->isLocal() || app()->environment('testing')) && session('verification_link')
+                @if (app()->isLocal() || app()->environment('testing'))
+                    @if (session('verification_link'))
                     <a href="{{ session('verification_link') }}" class="btn btn-primary">
                         認証はこちらから
                     </a>
                 @else
                     <p>メール内のリンクから認証を完了してください。</p>
+                    @endif
                 @endif
 
                 <form method="POST" action="{{ route('verification.send') }}">
