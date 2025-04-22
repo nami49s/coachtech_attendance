@@ -48,7 +48,7 @@
                             <div class="time-row">
                                 <input type="time" name="checkin_time" value="{{ \Carbon\Carbon::parse($attendance->checkin_time)->format('H:i') }}" required>
                                 〜
-                                <input type="time" name="checkout_time" value="{{ \Carbon\Carbon::parse($attendance->checkout_time)->format('H:i') }}">
+                                <input type="time" name="checkout_time" value="{{ $attendance->checkout_time ? \Carbon\Carbon::parse($attendance->checkout_time)->format('H:i') : '' }}">
                             </div>
                             @error('checkin_time')
                                 <div class="error-message">{{ $message }}</div>
@@ -66,7 +66,7 @@
                                 <div class="time-row">
                                     <input type="time" name="break_start[]" value="{{ \Carbon\Carbon::parse($break->break_start)->format('H:i') }}">
                                     〜
-                                    <input type="time" name="break_end[]" value="{{ \Carbon\Carbon::parse($break->break_end)->format('H:i') }}">
+                                    <input type="time" name="break_end[]" value="{{ $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '' }}">
                                 </div>
                                 @error('break_start.' . $index)
                                     <div class="error-message">{{ $message }}</div>

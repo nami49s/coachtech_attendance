@@ -23,7 +23,7 @@
                 </div>
             @endif
             <div class="btn-container">
-                @if (app()->isLocal() || app()->environment('testing')) && session('verification_link'))
+                @if (app()->isLocal() || app()->environment('testing')) && session('verification_link')
                     <a href="{{ session('verification_link') }}" class="btn btn-primary">
                         認証はこちらから
                     </a>

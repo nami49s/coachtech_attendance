@@ -45,15 +45,25 @@
                     <tr>
                         <td>{{ $attendance->user->name }}</td>
                         <td>{{ \Carbon\Carbon::parse($attendance->checkin_time)->format('H:i') }}</td>
-                        <td>{{ \Carbon\Carbon::parse($attendance->checkout_time)->format('H:i') ?? '未退勤' }}</td>
+                        <td>
+                            @if ($attendance->checkout_time)
+                                {{ \Carbon\Carbon::parse($attendance->checkout_time)->format('H:i') }}
+                            @else
+                                未退勤
+                            @endif
+                        </td>
                         <td>
                             @php
                                 $breaks = $attendance->breaks ?? collect([]);
-                                $totalBreak = $breaks->sum(function($break) {
-                                    return $break->break_end ? strtotime($break->break_end) - strtotime($break->break_start) : 0;
+                                $endedBreaks = $breaks->filter(function($break) {
+                                    return $break->break_end;
+                                });
+
+                                $totalBreak = $endedBreaks->sum(function($break) {
+                                    return strtotime($break->break_end) - strtotime($break->break_start);
                                 });
                             @endphp
-                            {{ gmdate("H:i", $totalBreak) }}
+                            {{ $totalBreak > 0 ? gmdate("H:i", $totalBreak) : 'ー' }}
                         </td>
                         <td>
                             @if ($attendance->checkout_time)
