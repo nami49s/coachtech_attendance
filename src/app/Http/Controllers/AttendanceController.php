@@ -11,6 +11,7 @@ use App\Models\AttendanceRequest;
 use App\Models\BreakRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\CarbonPeriod;
 
 class AttendanceController extends Controller
 {
@@ -171,12 +172,24 @@ class AttendanceController extends Controller
         $prevMonth = $currentDate->copy()->subMonth()->format('Y-m');
         $nextMonth = $currentDate->copy()->addMonth()->format('Y-m');
 
-        $attendances = Attendance::where('user_id', $user->id)
-            ->whereYear('date', $currentDate->year)
-            ->whereMonth('date', $currentDate->month)
+        $startOfMonth = $currentDate->copy()->startOfMonth();
+        $endOfMonth = $currentDate->copy()->endOfMonth();
+        $dates = CarbonPeriod::create($startOfMonth, $endOfMonth);
+
+        $rawAttendances = Attendance::where('user_id', $user->id)
+            ->whereBetween('date', [$startOfMonth->format('Y-m-d'), $endOfMonth->format('Y-m-d')])
             ->with('breaks')
-            ->orderBy('date', 'asc')
-            ->get();
+            ->get()
+            ->keyBy('date');
+
+        $attendances = collect();
+        foreach ($dates as $date) {
+            $attendance = $rawAttendances->get($date->format('Y-m-d'));
+            $attendances->push([
+                'date' => $date,
+                'attendance' => $attendance,
+            ]);
+        }
 
         return view('attendance.index', compact('attendances', 'currentMonth', 'prevMonth', 'nextMonth'));
     }

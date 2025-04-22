@@ -63,6 +63,8 @@ class AdminAttendanceController extends Controller
         $attendances = Attendance::where('user_id', $user->id)
             ->whereYear('date', substr($month, 0, 4))
             ->whereMonth('date', substr($month, 5, 2))
+            ->with('breaks')
+            ->orderBy('date')
             ->get();
 
         return view('admin.monthlyattendance', [
@@ -109,7 +111,8 @@ class AdminAttendanceController extends Controller
         $attendances = Attendance::with('breaks')
             ->where('user_id', $userId)
             ->whereBetween('date', [$startDate, $endDate])
-            ->get();
+            ->get()
+            ->keyBy('date');
 
         $user = \App\Models\User::findOrFail($userId);
 
@@ -122,26 +125,32 @@ class AdminAttendanceController extends Controller
 
         $columns = ['日付', '出勤', '退勤', '休憩', '合計'];
 
-        $callback = function () use ($attendances, $columns) {
+        $callback = function () use ($attendances, $startDate, $endDate, $columns) {
             $handle = fopen('php://output', 'w');
 
             fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
             fputcsv($handle, $columns);
 
-            foreach ($attendances as $attendance) {
-                $breaks = $attendance->breaks ?? collect([]);
-                $totalBreak = $breaks->sum(function ($break) {
+            $period = Carbon::parse($startDate)->daysUntil($endDate->addDay());
+
+            foreach ($period as $date) {
+                $attendance = $attendances[$date->format('Y-m-d')] ?? null;
+
+                $checkin = $attendance?->checkin_time;
+                $checkout = $attendance?->checkout_time;
+
+                $totalBreak = $attendance?->breaks->sum(function ($break) {
                     return $break->break_end ? strtotime($break->break_end) - strtotime($break->break_start) : 0;
-                });
+                }) ?? 0;
 
                 $row = [
-                    Carbon::parse($attendance->date)->format('Y/m/d'),
-                    $attendance->checkin_time ? Carbon::parse($attendance->checkin_time)->format('H:i') : '',
-                    $attendance->checkout_time ? Carbon::parse($attendance->checkout_time)->format('H:i') : '',
-                    gmdate('H:i', $totalBreak),
-                    $attendance->checkout_time
-                        ? gmdate("H:i", strtotime($attendance->checkout_time) - strtotime($attendance->checkin_time) - $totalBreak)
+                    $date->format('Y/m/d'),
+                    $checkin ? Carbon::parse($checkin)->format('H:i') : '',
+                    $checkout ? Carbon::parse($checkout)->format('H:i') : '',
+                    $attendance ? gmdate("H:i", $totalBreak) : '',
+                    ($attendance && $checkout)
+                        ? gmdate("H:i", strtotime($checkout) - strtotime($checkin) - $totalBreak)
                         : '',
                 ];
 

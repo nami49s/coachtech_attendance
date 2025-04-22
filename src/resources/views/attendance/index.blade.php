@@ -42,32 +42,37 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($attendances as $attendance)
-                <tr>
-                    <td>
-                        {{ \Carbon\Carbon::parse($attendance->date)->format('m/d') }}
-                        ({{ ['日','月','火','水','木','金','土'][\Carbon\Carbon::parse($attendance->date)->dayOfWeek] }})
-                    </td>
-                    <td>{{ \Carbon\Carbon::parse($attendance->checkin_time)->format('H:i') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($attendance->checkout_time)->format('H:i')  ?? '未退勤' }}</td>
-                    <td>
-                        @php
-                            $breaks = $attendance->breaks ?? collect([]);
-                            $totalBreak = $breaks->sum(function($break) {
-                                return $break->break_end ? strtotime($break->break_end) - strtotime($break->break_start) : 0;
-                            });
-                        @endphp
-                        {{ gmdate("H:i", $totalBreak) }}
-                    </td>
-                    <td>
-                        @if ($attendance->checkout_time)
-                            {{ gmdate("H:i", strtotime($attendance->checkout_time) - strtotime($attendance->checkin_time) - $totalBreak) }}
-                        @else
-                            ー
-                        @endif
-                    </td>
-                    <td><a href="{{ route('attendance.detail', $attendance->id) }}" class="detail-link">詳細</a></td>
-                </tr>
+                @foreach ($attendances as $record)
+                    @php
+                        $date = $record['date'];
+                        $attendance = $record['attendance'];
+                        $checkin = $attendance?->checkin_time;
+                        $checkout = $attendance?->checkout_time;
+                        $breaks = $attendance?->breaks ?? collect();
+                        $totalBreak = $breaks->sum(function($break) {
+                            return $break->break_end ? strtotime($break->break_end) - strtotime($break->break_start) : 0;
+                        });
+                    @endphp
+                    <tr>
+                        <td>{{ $date->format('m/d') }} ({{ ['日','月','火','水','木','金','土'][$date->dayOfWeek] }})</td>
+                        <td>{{ $checkin ? \Carbon\Carbon::parse($checkin)->format('H:i') : '' }}</td>
+                        <td>{{ $checkout ? \Carbon\Carbon::parse($checkout)->format('H:i') : '' }}</td>
+                        <td>{{ $attendance ? gmdate("H:i", $totalBreak) : '' }}</td>
+                        <td>
+                            @if ($attendance && $checkout)
+                                {{ gmdate("H:i", strtotime($checkout) - strtotime($checkin) - $totalBreak) }}
+                            @else
+
+                            @endif
+                        </td>
+                        <td>
+                            @if ($attendance)
+                                <a href="{{ route('attendance.detail', $attendance->id) }}" class="detail-link">詳細</a>
+                            @else
+
+                            @endif
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
