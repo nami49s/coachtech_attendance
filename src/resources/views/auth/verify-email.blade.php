@@ -22,14 +22,13 @@
                     {{ session('message') }}
                 </div>
             @endif
+
             <div class="btn-container">
                 @if (app()->isLocal() || app()->environment('testing'))
                     @if (session('verification_link'))
-                    <a href="{{ session('verification_link') }}" class="btn btn-primary">
-                        認証はこちらから
-                    </a>
-                @else
-                    <p>メール内のリンクから認証を完了してください。</p>
+                        <a href="{{ session('verification_link') }}" class="btn btn-primary">
+                            認証はこちらから
+                        </a>
                     @endif
                 @endif
 
