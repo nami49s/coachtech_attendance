@@ -46,11 +46,12 @@ main h2 {
     border: 3px solid rgb(237, 240, 240);
     border-radius: 10px;
     background-color: #ffffff;
+    border-collapse: collapse;
     overflow: hidden;
+    table-layout: fixed;
 }
 
 .attendance-table th {
-    border: none;
     border-bottom: 4px solid rgb(237, 240, 240);
     padding: 0.8rem;
     text-align: center;

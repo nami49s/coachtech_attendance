@@ -30,8 +30,9 @@ class AdminAttendanceController extends Controller
             });
 
         return view('admin.index', [
-            'date' => $date,
-            'attendances' => $attendances
+            'staffs' => User::all(),
+            'attendances' => Attendance::with('breaks', 'user')->whereDate('date', $date)->get(),
+            'date' => $date
         ]);
     }
 

@@ -41,39 +41,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($attendances as $attendance)
-                    <tr>
-                        <td>{{ $attendance->user->name }}</td>
-                        <td>{{ \Carbon\Carbon::parse($attendance->checkin_time)->format('H:i') }}</td>
-                        <td>
-                            @if ($attendance->checkout_time)
-                                {{ \Carbon\Carbon::parse($attendance->checkout_time)->format('H:i') }}
-                            @else
-                                未退勤
-                            @endif
-                        </td>
-                        <td>
-                            @php
-                                $breaks = $attendance->breaks ?? collect([]);
-                                $endedBreaks = $breaks->filter(function($break) {
-                                    return $break->break_end;
-                                });
+                    @foreach ($staffs as $staff)
+                        @php
+                            $attendance = $attendances->firstWhere('user_id', $staff->id);
+                            $checkin = $attendance?->checkin_time;
+                            $checkout = $attendance?->checkout_time;
+                            $breaks = $attendance?->breaks ?? collect([]);
+                            $endedBreaks = $breaks->filter(fn($b) => $b->break_end);
+                            $totalBreak = $endedBreaks->sum(fn($b) => strtotime($b->break_end) - strtotime($b->break_start));
+                        @endphp
+                        <tr>
+                            <td>{{ $staff->name }}</td>
+                            <td>{{ $checkin ? \Carbon\Carbon::parse($checkin)->format('H:i') : '' }}</td>
+                            <td>{{ $checkout ? \Carbon\Carbon::parse($checkout)->format('H:i') : ($checkin ? '未退勤' : '') }}</td>
+                            <td>{{ $totalBreak > 0 ? gmdate("H:i", $totalBreak) : '' }}</td>
+                            <td>
+                                @if ($checkin && $checkout)
+                                    {{ gmdate("H:i", strtotime($checkout) - strtotime($checkin) - $totalBreak) }}
+                                @else
 
-                                $totalBreak = $endedBreaks->sum(function($break) {
-                                    return strtotime($break->break_end) - strtotime($break->break_start);
-                                });
-                            @endphp
-                            {{ $totalBreak > 0 ? gmdate("H:i", $totalBreak) : 'ー' }}
-                        </td>
-                        <td>
-                            @if ($attendance->checkout_time)
-                                {{ gmdate("H:i", strtotime($attendance->checkout_time) - strtotime($attendance->checkin_time) - $totalBreak) }}
-                            @else
-                                ー
-                            @endif
-                        </td>
-                        <td><a class="detail-link" href="{{ route('admin.show', ['attendance' => $attendance->id]) }}">詳細</a></td>
-                    </tr>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($attendance)
+                                    <a class="detail-link" href="{{ route('admin.show', ['attendance' => $attendance->id]) }}">詳細</a>
+                                @else
+
+                                @endif
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
