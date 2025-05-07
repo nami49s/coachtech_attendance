@@ -112,7 +112,7 @@ MAIL_FROM_NAME="coachtech_attendance"
 ## テスト用データベースの設定
 このプロジェクトでは、テスト実行時に laravel_test データベースを使用します。
 ### 1. テストDBの作成（MySQL）
-以下のコマンドを実行してください：
+MySQLで以下のコマンドを実行してください：
 ```sql
 CREATE DATABASE laravel_test;
 GRANT ALL PRIVILEGES ON laravel_test.* TO 'your_db_user'@'localhost' IDENTIFIED BY 'your_db_password';
@@ -128,7 +128,20 @@ DB_USERNAME=your_db_user
 DB_PASSWORD=your_db_password
 ```
 ### 3. テスト用マイグレーションとシーディング
+Dockerを使用している場合、テスト用のデータ作成のため、docker-compose exec php bashでphpコンテナに入り、以下のコマンドを実行してください。
 ```bash
 php artisan migrate --env=testing
 php artisan db:seed --env=testing
 ```
+### 4. テスト実行
+コンテナ内で全テストを実行するには、以下のコマンドを実行してください。
+```bash
+php artisan test
+```
+また、特定のクラスのみテストを実行したい場合は以下のコマンドを実行してください。
+（ExampleTestはテストしたいクラス名に置き換えてください。）
+```bash
+php artisan test --filter=ExampleTest
+```
+
+
